@@ -1,0 +1,1 @@
+{"name": "根节点", "children": [{"name": "分支一", "children": [{"name": "叶子1-1"}, {"name": "叶子1-2"}]}, {"name": "分支二", "children": [{"name": "叶子2-1"}, {"name": "叶子2-2"}, {"name": "叶子2-3"}]}, {"name": "分支三", "children": [{"name": "叶子3-1"}]}]}
