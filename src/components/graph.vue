@@ -1,51 +1,44 @@
+<template>
+  <div id="graph" style="width: 800px; height: 600px"></div>
+</template>
+
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
-// 全量引入 echarts
-import * as echarts from 'echarts'
+import * as echarts from "echarts";
+import { onMounted } from 'vue'
 
-const chartRef = ref<HTMLDivElement>()
-let chartInstance: any = null
-
-onMounted(() => {
-  if (chartRef.value) {
-    chartInstance = echarts.init(chartRef.value)
-
-    const option = {
-      title: {
-        text: '关系图',
-        left: 'center',
-        top: 10,
-        textStyle: { fontSize: 24, color: '#333' }
-      },
-      legend: {
-        data: ['男性', '女性'],
-        bottom: 20,
-        textStyle: { color: '#333' }
-      },
-      series: [{
+const initCharts = () => {
+  var myChart = echarts.init(document.getElementById("graph"));
+  let option = {
+    title: {
+      text: "关系图",
+    },
+    label: {},
+    legend: {
+      x: "center",
+      top: "20%",
+      data: ["男性", "女性"],
+    },
+    series: [
+      {
         type: "graph",
-        layout: "force",
-        symbolSize: 50,
-        focusNodeAdjacency: true,
-        roam: true,
+        layout: "force", // 使用力导向布局
+        symbolSize: 50, // 节点大小
+        focusNodeAdjacency: true, // 鼠标悬浮时突出显示相关节点和边
         categories: [
           { name: "男性", itemStyle: { color: "#009800" } },
           { name: "女性", itemStyle: { color: "#4592ff" } },
-        ],
-        label: {
-          show: true,
-          position: "inside",
-          textStyle: { fontSize: 14, color: "#fff" }
-        },
+        ], // 分类数据
+        label: {},
         force: {
-          repulsion: 1000,
-          edgeLength: [80, 200]
+          repulsion: 1000, // 节点之间的斥力
         },
         edgeLabel: {
           show: true,
+          textStyle: {
+            fontSize: 10,
+          },
           formatter: "{c}",
-          textStyle: { fontSize: 12, color: "#333" }
-        },
+        }, // 边标签
         data: [
           { name: "A", category: 0, draggable: true },
           { name: "B", category: 1, draggable: true },
@@ -55,7 +48,7 @@ onMounted(() => {
           { name: "F", category: 1, draggable: true },
           { name: "G", category: 1, draggable: true },
           { name: "H", category: 1, draggable: true },
-        ],
+        ], // 节点数据
         links: [
           { source: 0, target: 1, value: "夫妻" },
           { source: 0, target: 3, value: "父子" },
@@ -65,51 +58,21 @@ onMounted(() => {
           { source: 1, target: 7, value: "朋友" },
           { source: 1, target: 4, value: "朋友" },
           { source: 1, target: 6, value: "朋友" },
-        ],
+        ], // 边数据
         lineStyle: {
-          opacity: 0.8,
-          width: 3,
-          curveness: 0.3,
-          color: "#999"
-        }
-      }]
-    }
+          opacity: 0.9, // 边的不透明度
+          width: 3, // 边的宽度
+          curveness: 0.3, // 边的曲度，支持从 0 到 1 的值，值越大曲度越大
+        },
+      },
+    ],
+  };
+  myChart.setOption(option);
+};
 
-    chartInstance.setOption(option)
-  }
-})
-
-onUnmounted(() => {
-  chartInstance?.dispose()
-})
+onMounted(() => {
+  initCharts();
+});
 </script>
 
-<template>
-  <div class="graph-wrapper">
-    <h2 class="title">关系图</h2>
-    <div ref="chartRef" class="chart"></div>
-  </div>
-</template>
-
-<style scoped>
-.graph-wrapper {
-  width: 100%;
-  height: 100vh;
-  background-color: #ffffff;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.title {
-  margin-top: 20px;
-  font-size: 24px;
-  color: #333333 !important;
-}
-
-.chart {
-  width: 90%;
-  height: calc(100% - 80px);
-  margin-top: 16px;
-}
-</style>
+<style scoped></style>
